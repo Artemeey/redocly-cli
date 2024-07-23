@@ -1,4 +1,4 @@
-import {
+import type {
   Oas3Rule,
   Oas3Preprocessor,
   Oas2Rule,
@@ -13,13 +13,14 @@ import { Oas3Types } from './types/oas3';
 import { Oas3_1Types } from './types/oas3_1';
 import { AsyncApi2Types } from './types/asyncapi';
 import { ArazzoTypes } from './types/arazzo';
-import {
+import type {
   BuiltInAsync2RuleId,
   BuiltInCommonOASRuleId,
   BuiltInArazzoRuleId,
   BuiltInOAS2RuleId,
   BuiltInOAS3RuleId,
 } from './types/redocly-yaml';
+import { isPlainObject } from './utils';
 
 export type RuleSet<T> = Record<string, T>;
 
@@ -81,8 +82,8 @@ export type Oas2DecoratorsSet = Record<string, Oas2Preprocessor>;
 export type Async2DecoratorsSet = Record<string, Async2Preprocessor>;
 export type ArazzoDecoratorsSet = Record<string, ArazzoPreprocessor>;
 
-export function detectSpec(root: any): SpecVersion {
-  if (typeof root !== 'object') {
+export function detectSpec(root: unknown): SpecVersion {
+  if (!isPlainObject(root)) {
     throw new Error(`Document must be JSON object, got ${typeof root}`);
   }
 
@@ -90,11 +91,11 @@ export function detectSpec(root: any): SpecVersion {
     throw new Error(`Invalid OpenAPI version: should be a string but got "${typeof root.openapi}"`);
   }
 
-  if (root.openapi && root.openapi.startsWith('3.0')) {
+  if (typeof root.openapi === 'string' && root.openapi.startsWith('3.0')) {
     return SpecVersion.OAS3_0;
   }
 
-  if (root.openapi && root.openapi.startsWith('3.1')) {
+  if (typeof root.openapi === 'string' && root.openapi.startsWith('3.1')) {
     return SpecVersion.OAS3_1;
   }
 
@@ -102,12 +103,11 @@ export function detectSpec(root: any): SpecVersion {
     return SpecVersion.OAS2;
   }
 
-  // if not detected yet
   if (root.openapi || root.swagger) {
     throw new Error(`Unsupported OpenAPI version: ${root.openapi || root.swagger}`);
   }
 
-  if (root.asyncapi && root.asyncapi.startsWith('2.')) {
+  if (typeof root.asyncapi === 'string' && root.asyncapi.startsWith('2.')) {
     return SpecVersion.Async2;
   }
 
@@ -115,7 +115,7 @@ export function detectSpec(root: any): SpecVersion {
     throw new Error(`Unsupported AsyncAPI version: ${root.asyncapi}`);
   }
 
-  if (root.arazzo && root.arazzo.startsWith('1.')) {
+  if (typeof root.arazzo === 'string' && root.arazzo.startsWith('1.')) {
     return SpecVersion.Arazzo;
   }
 
