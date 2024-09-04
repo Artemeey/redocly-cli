@@ -1,5 +1,15 @@
 # @redocly/openapi-core
 
+## 2.0.0
+
+### Minor Changes
+
+- Added support for AsyncAPI 3.0 description linting.
+
+### Patch Changes
+
+- Fixed an issue where `patternProperties` incorrectly caused linting errors due to a missing `PatternProperties` node.
+
 ## 1.18.1
 
 ### Patch Changes
