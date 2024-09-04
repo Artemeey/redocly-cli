@@ -1,5 +1,20 @@
 # @redocly/cli
 
+## 2.0.0
+
+### Major Changes
+
+- Fix absolute path for import plugin in Windows
+
+### Minor Changes
+
+- Added support for AsyncAPI 3.0 description linting.
+
+### Patch Changes
+
+- Fixed an issue where `patternProperties` incorrectly caused linting errors due to a missing `PatternProperties` node.
+- Updated @redocly/openapi-core to v2.0.0.
+
 ## 1.18.1
 
 ### Patch Changes
